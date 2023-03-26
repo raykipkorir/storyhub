@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load account socialaccount %}
+{% load crispy_forms_filters %}
+
+{% block title %}{% trans "Sign In" %}{% endblock title %}
+
+{% block content %}
+<div class="row mt-5">
+    <div class="col-md-3 offset-md-4">
+
+        {% comment %} Social login {% endcomment %}
+        {% get_providers as socialaccount_providers %}
+        
+        {% if socialaccount_providers %}
+            <ul class="p-0">
+                {% for provider in socialaccount_providers %}
+                    {% if provider.id == "openid" %}
+                    {% for brand in provider.get_brands %}
+                    <li>
+                    <a title="{{brand.name}}" 
+                        class="socialaccount_provider {{provider.id}} {{brand.id}}" 
+                        href="{% provider_login_url provider.id openid=brand.openid_url process="login" %}"
+                        >{{brand.name}}</a>
+                    </li>
+                    {% endfor %}
+                    {% endif %}
+        
+                    <li style="list-style: none;" class="d-grid">
+                    <a 
+                        title="{{provider.name}}" 
+                        class="{% if provider.id == "google" %}btn btn-danger{% endif %}" 
+                        href="{% provider_login_url provider.id process="login" scope=scope auth_params=auth_params %}">
+                        Sign in with {{provider.name}}
+                    </a>
+                    </li>
+                {% endfor %}
+              </ul>
+          <div class="text-center fs-5 text-muted">{% trans 'or' %}</div>
+
+        {% include "socialaccount/snippets/login_extra.html" %}
+
+        {% endif %}
+        {% comment %} end of social login {% endcomment %}
+        
+        {% comment %} email and password login {% endcomment %}
+        <form class="d-flex flex-column" method="POST" action="{% url 'account_login' %}">
+          {% csrf_token %}
+          {{ form|crispy }}
+          {% if redirect_field_value %}
+          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+          {% endif %}
+          <a class="mb-1" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+          <button class="btn btn-primary" type="submit">{% trans "Sign In" %}</button>
+        </form>
+        {% comment %} end of email and password login {% endcomment %}
+    
+    </div>
+</div>
+
+{% endblock %}

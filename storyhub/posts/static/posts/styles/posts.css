@@ -1,0 +1,37 @@
+a:link { text-decoration: none; }
+a:visited { text-decoration: none; }
+a:hover { text-decoration: none; }
+a:active { text-decoration: none; }
+
+.no-display {
+  display: none;
+}
+
+label {
+  cursor: pointer;
+}
+
+.no-outline {
+  border: none;
+}
+.no-outline:focus {
+  outline: none;
+}
+
+.hover-red {
+  transition: border 2s !important;
+}
+
+.hover-red:hover {
+  border: 0.5px solid red !important ;
+}
+
+textarea {
+  resize: none;
+  overflow: auto;
+}
+
+.errorlist {
+  color: red;
+  padding-left: 0;
+}

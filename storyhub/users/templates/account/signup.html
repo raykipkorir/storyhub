@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_filters %}
+
+{% block title %}
+User Signup
+{% endblock title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+      <form action="" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" value="Get started" class="btn btn-primary">
+      </form>   
+    </div>
+</div>
+{% endblock content %}

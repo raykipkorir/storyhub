@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load socialaccount %}
+{% block title %}{% trans "Sign In" %}{% endblock title%}
+
+{% block content %}
+<div class="row mt-3">
+    <div class="col-md-5 offset-md-3">
+        {% if process == "connect" %}
+        <h1>{% blocktrans with provider.name as provider %}Connect {{ provider }}{% endblocktrans %}</h1>
+        
+        <p>{% blocktrans with provider.name as provider %}You are about to connect a new third party account from {{ provider }}.{% endblocktrans %}</p>
+        {% else %}
+        <h1>{% blocktrans with provider.name as provider %}Sign In Via {{ provider }}{% endblocktrans %}</h1>
+        
+        <p>{% blocktrans with provider.name as provider %}You are about to sign in using a third party account from {{ provider }}.{% endblocktrans %}</p>
+        {% endif %}
+        
+        <form action="{% provider_login_url "google" %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary">{% trans "Continue" %}</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

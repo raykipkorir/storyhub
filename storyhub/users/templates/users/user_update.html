@@ -1,0 +1,40 @@
+{% extends 'users/settings.html' %}
+
+{% load crispy_forms_filters %}
+
+{% block settings-form %}
+<div class="row">
+    <div class="col d-flex flex-column gap-3">
+
+        <div class="settings-form border rounded p-3">
+            <h1>User update</h1>
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button name="user_update" type="submit" class="btn btn-primary mb-2">Update user</button>
+            </form>  
+        </div>
+
+        <div class="settings-form border rounded p-3">
+            <h1>Account Emails</h1>
+            <ul>
+                {% for email in emails %}
+                    <li class="">
+                        <span>{{ email }}</span>
+                        {% if email.primary %}
+                        <strong> - Primary</strong>
+                        {% endif %}
+                    </li>
+                {% endfor %} 
+            </ul>
+            
+        </div>
+
+        <div class="settings-form border rounded p-3 mb-2">
+            <h1>Danger Zone</h1>
+            <a href="{% url 'user_delete' %}" class="btn btn-danger mb-2 mt-2">Delete User</a>
+        </div>
+    </div>
+</div>
+
+{% endblock settings-form %}

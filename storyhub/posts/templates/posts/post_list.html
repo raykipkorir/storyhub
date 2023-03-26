@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load markdown_extras %}
+{% load static %}
+{% block title %}
+StoryHub Community
+{% endblock title %}
+{% block content %}
+<div class="row mt-5 ms-5">
+   <div class="col-md-8">
+      {% for post in posts %}
+      <div class="row mb-2 border">
+         <div class="col">
+            {% comment %} profile pic,, username, date  {% endcomment %}
+            <div class="row">
+               <div class="col d-flex align-items-center gap-2 p-2">
+                  {% comment %} profile pic  {% endcomment %}
+                  <a href="{% url 'user_profile' post.user.username %}" style="color: black;" class="d-flex align-items-center gap-2">
+                  {% if post.user.userprofile.profile_pic %}
+                  <img
+                     src="{{ post.user.userprofile.profile_pic.url }}" 
+                     alt="" 
+                     height="30" 
+                     width="30" 
+                     class="rounded-circle mt-2 "
+                     />
+                  {% else %}
+                  <img
+                     src="{% static 'users/images/default_pic.jpg' %}" 
+                     alt="" 
+                     height="30" 
+                     width="30" 
+                     class="rounded-circle mt-2 "
+                     />
+                  {% endif %}
+                  {% comment %} username {% endcomment %}
+                  <span>{{ post.user.username }}</span>
+                  </a>
+                  {% comment %} date {% endcomment %}
+                  <span class="text-muted">{{ post.updated_at|date:"M d Y" }}</span>
+               </div>
+            </div>
+            {% comment %} post title, post content, cover image  {% endcomment %}
+            <div class="row">
+               <div class="col-md-8">
+                  <div>
+                     <a href="{% url 'post_detail' post.user.username post.slug %} " style="color: black;">
+                        <h1>{{ post.title}}</h1>
+                        {% autoescape off %}
+                        {{ post.content|markdown|truncatewords:40 }}
+                        {% endautoescape %}
+                     </a>
+                  </div>
+               </div>
+               <div class="col-md-2 offset-md-1">
+                  <div>
+                     {% if post.cover_image %}
+                     <img src="{{ post.cover_image.url }}" alt="" height="100" width="100">
+                     {% endif %}
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      {% endfor %}
+   </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Settings - StoryHub
+{% endblock title %}
+
+{% block content %}
+<div class="row mt-5">
+    {% comment %} first column {% endcomment %}
+    <div class="col-md-3 offset-md-1">
+        <nav class="nav flex-column font-monospace">
+            <a class="nav-link active" style="color: black;" aria-current="page" href="{% url 'profile_update' %}">
+                <i class="fa-solid fa-user"></i> 
+                Profile
+            </a>    
+            <a class="nav-link" href="{% url 'user_update' %}" style="color: black;">
+                <i class="fa-solid fa-lock"></i> 
+                Account
+            </a>
+            <a class="nav-link" href="{% url 'account_email' %}" style="color: black;">
+                <i class="fa-solid fa-envelope"></i> 
+                Email
+            </a>
+            <a class="nav-link" href="{% url 'account_change_password' %}" style="color: black;">
+                <i class="fa-solid fa-key"></i>
+                Set password
+            </a>
+        </nav>
+    </div>
+    {% comment %} second column {% endcomment %}
+    <div class="col-md-6">
+
+    {% block settings-form %}{% endblock settings-form %}
+
+    </div>
+</div>
+{% endblock content %}

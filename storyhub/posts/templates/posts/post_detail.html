@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load markdown_extras %}
+{% block title %}
+Post Detail
+{% endblock title %}
+{% block content %}
+<div class="row">
+   <div class="col-md-7 offset-md-1 border">
+      <div class="row">
+         <div class="col">
+            {% comment %} cover image {% endcomment %}
+            <div class="row">
+               {% if post.cover_image %}
+               <div class="col p-0">
+                  <img src="{{ post.cover_image.url }}" alt="" height="300" width="750" />
+               </div>
+               {% endif %}
+            </div>
+            {% comment %} profile pic, username, date, icons  {% endcomment %}
+            <div class="row">
+               <div class="col d-flex align-items-center justify-content-between">
+                  <div class="d-flex justify-content-center">
+                     {% comment %} profile pic {% endcomment %}
+                     <a href="{% url 'user_profile' post.user.username %}">
+                     {% if post.user.userprofile.profile_pic %}
+                     <img
+                        src="{{ post.user.userprofile.profile_pic.url }}" 
+                        alt="" 
+                        height="30" 
+                        width="30" 
+                        class="rounded-circle mt-2 "
+                        />
+                     {% else %}
+                     <img
+                        src="{% static 'users/images/default_pic.jpg' %}" 
+                        alt="" 
+                        height="30" 
+                        width="30" 
+                        class="rounded-circle mt-2 "
+                        />
+                     {% endif %}
+                     </a>
+                     <div class="d-flex flex-column ms-2">
+                        {% comment %} username {% endcomment %}
+                        <a href="{% url 'user_profile' post.user.username %}" style="color: black;">
+                           <span class="fs-5">{{ post.user.username }}</span>
+                        </a>
+                        {% comment %} date {% endcomment %}
+                        <span class="text-muted">{{ post.updated_at|date:"M d Y" }}</span>
+                     </div>
+                  </div>
+                  {% comment %} icons  {% endcomment %}
+                  <div class="d-flex flex-column align-items-center">
+                     <ul id="icons" class="d-flex gap-3 mb-1 fs-5" data-id="{{ post.id }}">
+                        <li><i class="fa-brands fa-twitter"></i></li>
+                        <li><i class="fa-brands fa-facebook"></i></li>
+                        <li 
+                           id="bookmark_id" 
+                           class="reaction"
+                           >
+                        </li>
+                        <li
+                           id="like_id" 
+                           class="reaction"
+                           >
+                        </li>
+                     </ul>
+                     {% comment %} login to react {% endcomment %}
+                     {% if not user.is_authenticated %}
+                     <div>
+                        <a href="{% url 'account_login' %}" class="btn btn-primary">Login to react</a>
+                     </div>
+                     {% endif %}
+                  </div>
+                  {% comment %} edit and delete post {% endcomment %}
+                  {% if user == post.user %}
+                  <div class="d-flex gap-3">
+                     <a href="{% url 'post_update' post.user.username post.slug %}" style="color: black;">Edit</a>
+                     <a href="{% url 'post_delete' post.user.username post.slug %}" style="color: red;">Delete</a>
+                  </div>
+                  {% endif %}
+               </div>
+            </div>
+            {% comment %} post title  {% endcomment %}
+            <div class="row">
+               <div class="col">
+                  <h1>{{ post.title}}</h1>
+               </div>
+            </div>
+            {% comment %} post content {% endcomment %}
+            <div class="row mt-2">
+               <div class="col">
+                  {% autoescape off %}
+                  {{ post.content|markdown }}
+                  {% endautoescape %}
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<script type="module" src="{% static 'posts/js/reaction.js' %}"></script>
+{% endblock content %}

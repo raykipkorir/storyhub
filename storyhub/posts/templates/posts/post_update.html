@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Edit Post - StoryHub Community
+{% endblock title %}
+{% block content %}
+<div class="row mt-3">
+   <div class="col-md-8 offset-md-1">
+      {% comment %} post update form {% endcomment %}
+      <form id="postForm" action="{% url 'post_update' post.user post.slug %}" method="post" enctype="multipart/form-data">
+         {% csrf_token %}
+         <div class="d-flex justify-content-between p-2">
+            <div><span><strong>Update Post</strong></span></div>
+         </div>
+         <div class="border rounded p-5 pt-2 pb-3 mb-2" style="background-color: white;">
+            {% comment %} post cover image {% endcomment %}
+            {% if post.cover_image %}
+            <p><img id="output" width="200" src="{{ post.cover_image.url }}" /></p>
+            {% else %}
+            <p><img id="output" width="200" src="" /></p>
+            {% endif %}
+            <div class="d-flex gap-3">
+               <label id="labelFileInput" for="fileInput" class="d-flex border rounded p-2 font-monospace" style="width: 120px">
+               Cover image 
+               <input id="fileInput" name="cover_image" type="file" accept="image/*" class="no-display" />
+               </label>
+               {% if post.cover_image %}
+               <label id="removeCoverImage" for="cover_image-clear_id" class="border rounded p-2 font-monospace hover-red" style="cursor: pointer; color: red;">
+               Remove
+               <input type="checkbox" name="cover_image-clear" id="cover_image-clear_id" class="no-display">
+               </label>
+               {% else %}
+               <label for="cover_image-clear_id"  id="removeCoverImage" class="border rounded p-2 font-monospace hover-red" style="display: none; cursor: pointer; color: red;">
+               Remove
+               <input type="checkbox" name="cover_image-clear" id="cover_image-clear_id" class="no-display">
+               </label>
+               {% endif %}
+            </div>
+            {% comment %} post title {% endcomment %}
+            <textarea
+               id="postTitle"
+               name="title"
+               placeholder="New post title here..."
+               type="text"
+               class="d-flex fw-bold fs-3 pt-2 me-0 no-outline"
+               style="width: 100%"
+               required
+               >{{ post.title }}</textarea>
+            <br />
+            {% if form.errors %}
+            {{ form.errors.title }}
+            {% endif %}
+            {% comment %} post content {% endcomment %}
+            <textarea 
+               id="postContent" 
+               name="content" 
+               class="" 
+               style="width: 100%"
+               rows="5"
+               placeholder="Write post content here..."
+               required
+               > {{ post.content }}</textarea>
+            {% if form.errors %}
+            {{ form.errors.content }}
+            {% endif %}
+            {% comment %} submit button {% endcomment %}
+            <button type="submit" class="btn btn-primary">Update post</button>
+         </div>
+      </form>
+   </div>
+</div>
+<script type="module" src="{% static 'posts/js/post_update.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+{% endblock content %}

@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load markdown_extras %}
+{% block title %}
+Profile page - StoryHub Community
+{% endblock title %}
+
+{% block content %}
+{% comment %} big row {% endcomment %}
+<div class="row mt-5 d-flex justify-content-center">
+    {% comment %} first column {% endcomment %}
+    <div class="col-md-3">
+        {% comment %} profile pic {% endcomment %}
+        <div>
+            {% if profile.profile_pic %}
+            <img 
+                src="{{ profile.profile_pic.url }}" 
+                alt=""
+                height="100"
+                width="100"
+                class="border rounded"
+            />
+            {% else %}
+            <img 
+                src="{% static 'users/images/default_pic.jpg' %}" 
+                alt=""
+                height="100"
+                width="100"
+                class="border rounded"
+            />
+            {% endif %}
+        </div>
+        {% comment %} full name, profile bio and email{% endcomment %}
+        <div>
+            <p>
+                <span class="fw-bold">{{ profile.user.full_name}}</span>
+            </p>
+            {% if profile.bio %}
+            <p>
+                <span class="text-muted">{{ profile.bio}}</span>
+            </p>
+            {% endif %}
+            <p class="d-flex align-items-center gap-2">
+                <i class="fa-solid fa-envelope mt-1"></i>
+                <a class="" href="mailto:{{ profile.user.email }}">{{ profile.user.email}}</a>
+            </p>
+        </div>
+        {% comment %} twitter url and personal website {% endcomment %}
+        <div>
+            {% if profile.twitter_url %}
+                <a href="{{ profile.twitter_url }}"><i class="fa-brands fa-twitter"></i></a>
+            {% endif %}
+            {% if profile.personal_website %}
+                <a href="{{ profile.personal_website }}"><i class="fa-solid fa-globe"></i></a>
+            {% endif %}
+        </div>
+        {% comment %} edit profile {% endcomment %}
+        {% if user == profile.user %}
+        <div class="mt-2">
+            <p>
+                <a href="{% url 'profile_update' %}" style="color: green;">Edit profile</a>
+            </p>
+        </div>
+        {% endif %}
+    </div>
+
+    {% comment %} second column {% endcomment %}
+    <div class="col-md-7 border">
+        {% comment %} full name {% endcomment %}
+        <div>
+            <h1>{{profile.user.full_name}}</h1>
+        </div>
+        {% comment %} tabs {% endcomment %}
+        <div class="mt-5">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a 
+                        class="nav-link {% if tab == "posts" or tab == None %}active{% endif %}" 
+                        aria-current="page" 
+                        href="{% url 'user_profile' profile.user.username %}?tab=posts">
+                        Posts
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if tab == "saved" %}active{% endif %}" href="{% url 'user_profile' profile.user.username %}?tab=saved">Saved</a>
+                </li>
+            </ul>
+        </div>
+        {% comment %} posts {% endcomment %}
+        {% for post in posts %}
+      <div class="row mb-2 border-bottom mt-3">
+         <div class="col">
+            {% comment %} profile pic,, username, date  {% endcomment %}
+            <div class="row">
+               <div class="col d-flex align-items-center gap-2 p-2">
+                <a href="{% url 'user_profile' post.user.username %}" style="color: black;" class="d-flex align-items-center gap-2">
+                    {% if post.user.userprofile.profile_pic %}
+                        <img
+                        src="{{ post.user.userprofile.profile_pic.url }}" 
+                        alt="" 
+                        height="30" 
+                        width="30" 
+                        class="rounded-circle mt-2 "
+                        />
+                        {% else %}
+                        <img
+                        src="{% static 'users/images/default_pic.jpg' %}" 
+                        alt="" 
+                        height="30" 
+                        width="30" 
+                        class="rounded-circle mt-2 "
+                        />
+                        {% endif %}
+                    <span>{{ post.user.username }}</span>
+                </a>
+                <span class="text-muted">{{ post.updated_at|date:"M d Y" }}</span>
+               </div>
+            </div>
+            {% comment %} post title, post content, cover image  {% endcomment %}
+            <div class="row">
+               <div class="col-md-8">
+                  <div>
+                     <a href="{% url 'post_detail' post.user.username post.slug %} " style="color: black;">
+                        <h1>{{ post.title}}</h1>
+                        {% autoescape off %}
+                        {{ post.content|markdown|truncatewords:40 }}
+                        {% endautoescape %}
+                     </a>
+                  </div>
+               </div>
+               {% comment %} cover image  {% endcomment %}
+               <div class="col-md-2 offset-md-1">
+                  <div>
+                     {% if post.cover_image %}
+                     <img src="{{ post.cover_image.url }}" alt="" height="100" width="100">
+                     {% endif %}
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      {% endfor %}
+    </div>
+</div>
+{% endblock content %}

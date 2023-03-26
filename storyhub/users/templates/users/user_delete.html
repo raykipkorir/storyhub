@@ -1,0 +1,17 @@
+{% extends 'users/settings.html' %}
+
+{% load crispy_forms_filters %}
+
+{% block settings-form %}
+<div class="row border rounded" style="background-color: white;">
+    <div class="col">
+        <h1>User Delete</h1>
+        <form action="" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete User</button>
+            <p class="text-muted">This action is irreversible</p>
+        </form>
+    </div>
+</div>
+
+{% endblock settings-form %}

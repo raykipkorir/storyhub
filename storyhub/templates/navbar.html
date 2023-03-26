@@ -1,0 +1,67 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'post_list' %}">StoryHub</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <form class="d-flex" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search StoryHub" aria-label="Search">
+          <button class="search-button fs-4" type="submit"><i class="fa-brands fa-searchengin"></i></button>
+        </form>
+      </ul>
+      {% if user.is_authenticated %}
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'post_create' %}"><i class="fa-solid fa-feather"></i> Write</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {% if user.userprofile.profile_pic %}
+              <img 
+              src="{{ user.userprofile.profile_pic.url }}" 
+              alt="" 
+              height="25" 
+              width="25" 
+              style="border-radius: 100px"
+              >
+            {% else %}
+              <img 
+              src="{% static 'users/images/default_pic.jpg' %}" 
+              alt="" 
+              height="25" 
+              width="25" 
+              style="border-radius: 100px"
+              >
+            {% endif %}
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'user_profile' user.username %}"><i class="fa-solid fa-user"></i> Profile</a></li>
+            <li><a class="dropdown-item" href="{% url 'user_profile' user.username %}?tab=saved"><i class="fa-regular fa-bookmark"></i> Library</a></li>
+            <li><a class="dropdown-item" href="{% url 'post_create' %}"><i class="fa-solid fa-feather"></i> Create Post</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{% url 'profile_update' %}"><i class="fa-solid fa-gear"></i> Settings</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{% url 'account_logout' %}">Sign out</a></li>
+          </ul>
+        </li>
+      </ul>
+      <span class="navbar-text ms-3">
+        Welcome, {{ user.username }}
+      </span>
+      {% else %}
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a href="{% url 'account_login' %}" class="nav-link fs-5">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link btn btn-success" href="{% url 'account_signup' %}">Get Started</a>
+        </li>
+      </ul>
+      {% endif %}
+    </div>
+  </div>
+</nav>
