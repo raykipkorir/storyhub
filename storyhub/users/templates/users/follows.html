@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Follows - StoryHub Community
+{% endblock title %}
+{% block content %}
+<div class="row my-5">
+   <div class="col-md-7 offset-md-1">
+      {% comment %} number of followers {% endcomment %}
+      {% if tab == "following" %}
+      <h1>{{ follows|length }} following</h1>
+      {% else %}
+      <h1>{{ follows|length }} follower{{ follows|pluralize }}</h1>
+      {% endif %}
+      {% comment %} tabs {% endcomment %}
+      <div class="mt-5">
+         <ul class="nav nav-tabs">
+            <li class="nav-item">
+               <a 
+               class="nav-link {% if tab == "followers" or tab == None %}active{% endif %}" 
+               aria-current="page" 
+               href="{% url 'follows' profile.user.username %}?tab=followers">
+               Followers
+               </a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link {% if tab == "following" %}active{% endif %}" href="{% url 'follows' profile.user.username %}?tab=following">Following</a>
+            </li>
+         </ul>
+      </div>
+      {% comment %} follows  {% endcomment %}
+      <div class="d-flex flex-column gap-2">
+         {% for follow in follows %}
+         <div class="d-flex justify-content-between py-4">
+            <div class="d-flex">
+               <div>
+                  {% comment %} profile pic {% endcomment %}
+                  <a href="{% url 'user_profile' follow.user.username %}">
+                  {% if follow.user.userprofile.profile_pic %}
+                  <img
+                     src="{{ follow.profile_pic.url }}" 
+                     alt="" 
+                     height="50" 
+                     width="50" 
+                     class="rounded-circle mt-2"
+                     />
+                  {% else %}
+                  <img
+                     src="{% static 'users/images/default_pic.jpg' %}" 
+                     alt="" 
+                     height="50" 
+                     width="50" 
+                     class="rounded-circle mt-2"
+                     />
+                  {% endif %}
+                  </a>
+               </div>
+               <div class="d-flex flex-column ms-3">
+                  <a 
+                     href="{% url 'user_profile' follow.user.username %}" 
+                     style="color: black;" 
+                     class="fs-5"
+                     >
+                  {{ follow.user.full_name }}
+                  </a>
+                  {% if follow.bio %}
+                  <span class="text-muted">{{ follow.bio }}</span>
+                  {% endif %}
+               </div>
+            </div>
+            {% comment %} follow and unfollow button {% endcomment %}
+            <div class="me-3">
+               {% if not follow == user.userprofile %}
+               <form action="{% url 'follows' follow.user.username %}" method="post" class="mt-3">
+                  {% csrf_token %}
+                  <input type="hidden" name="profile" value={{ profile }}>
+                  <div>
+                     {% comment %} if follow is amongst profiles that the current logged in user follows show UNFOLLOW button {% endcomment %}
+                     {% if follow in user.userprofile.follows.all %}
+                     <button type="submit" class="btn btn-danger rounded-pill px-4" name="follow" value="unfollow">
+                     Unfollow
+                     </button>
+                     {% comment %} if profile is NOT amongst profiles that the current logged in user follows show FOLLOW button {% endcomment %}
+                     {% else %}
+                     <button type="submit" class="btn btn-success rounded-pill px-4" name="follow" value="follow">
+                     Follow
+                     </button>
+                     {% endif %}
+                  </div>
+               </form>
+               {% endif %} 
+            </div>
+         </div>
+         {% endfor %} 
+      </div>
+   </div>
+   {% comment %} profile snippet  {% endcomment %}
+   <div class="col-md-3 ms-2">
+      <div class="row">
+         <div class="col">
+            <div class="d-flex flex-column">
+               {% comment %} get unlimited access {% endcomment %}
+               <a href="" class="btn btn-success fs-5 my-5 rounded-pill">Get unlimited access</a>
+               <a href="{% url 'user_profile' profile.user.username %}">
+               {% comment %} profile pic {% endcomment %}
+               {% if profile.profile_pic %}
+               <img
+                  src="{{ profile.profile_pic.url }}" 
+                  alt="" 
+                  height="50" 
+                  width="50" 
+                  class="rounded-circle mt-2 "
+                  />
+               {% else %}
+               <img
+                  src="{% static 'users/images/default_pic.jpg' %}" 
+                  alt="" 
+                  height="50" 
+                  width="50" 
+                  class="rounded-circle mt-2 "
+                  />
+               {% endif %}
+               </a>
+               {% comment %} username {% endcomment %}
+               <a href="{% url 'user_profile' profile.user.username %}" style="color: black;">
+               <span class="fs-5">{{ profile.user.username }}</span>
+               </a>
+               <div>
+                  {% comment %} follower count {% endcomment %}
+                  <a 
+                     href="{% url 'follows' profile.user.username %}" 
+                     class="text-muted" 
+                     style="cursor: pointer;"
+                     >
+                  {{ profile.followed_by.all.count }} follower{{ profile.followed_by.all.count|pluralize}}
+                  </a>
+                  {% comment %} following count {% endcomment %}
+                  <a 
+                     href="{% url 'follows' profile.user.username %}?tab=following" 
+                     class="text-muted" 
+                     style="cursor: pointer;"
+                     >
+                  {{ profile.follows.all.count }} following
+                  </a>
+               </div>
+               {% comment %} follow and unfollow button {% endcomment %}
+               {% if not profile == user.userprofile %}
+               <form action="" method="post" class="mt-3">
+                  <input type="hidden" name="profile" value={{ profile }}>
+                  {% csrf_token %}
+                  <div>
+                     {% comment %} if profile is amongst profiles that the current logged in user follows show UNFOLLOW button {% endcomment %}
+                     {% if profile in user.userprofile.follows.all %}
+                     <button type="submit" class="btn btn-danger rounded-pill px-4" name="follow" value="unfollow">
+                     Unfollow
+                     </button>
+                     {% comment %} if profile is NOT amongst profiles that the current logged in user follows show FOLLOW button {% endcomment %}
+                     {% else %}
+                     <button type="submit" class="btn btn-success rounded-pill px-4" name="follow" value="follow">
+                     Follow
+                     </button>
+                     {% endif %}
+                  </div>
+               </form>
+               {% endif %}
+               <hr>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock content %}
