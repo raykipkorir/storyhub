@@ -14,10 +14,17 @@ class TestPostViews(TestCase):
         self.user: User = User.objects.create_user(
             username="john", email="john@email.com", password="testing321"
         )
+        self.user2: User = User.objects.create_user(
+            username="jane", email="jane@email.com", password="testing321"
+        )
+
         self.client.login(username="john", password="testing321")
 
         self.post: Post = Post.objects.create(
             user=self.user, title="My new post", content="Post content"
+        )
+        self.post2: Post = Post.objects.create(
+            user=self.user2, title="My first post", content="Post content"
         )
 
     def test_post_list_view(self) -> None:
@@ -41,7 +48,7 @@ class TestPostViews(TestCase):
             reverse("post_detail", kwargs={"username": "john", "slug": "new-post"}),
         )
 
-    def test_post_detail_view(self) -> None:
+    def test_post_detail_view_GET(self) -> None:
         response = self.client.get(
             reverse(
                 "post_detail",
@@ -50,6 +57,11 @@ class TestPostViews(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "posts/post_detail.html")
+
+    def test_post_detail_view_POST(self) -> None:
+        response = self.client.post(reverse("post_detail", kwargs={"username": "jane", "slug": "my-first-post"}))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("post_detail", kwargs={"username": "jane", "slug": "my-first-post"}))
 
     def test_post_update_view_GET(self) -> None:
         response = self.client.get(

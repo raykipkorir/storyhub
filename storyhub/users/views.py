@@ -2,6 +2,7 @@ from allauth.account.models import EmailAddress
 from allauth.account.views import SignupView
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Case, When
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from posts.models import BookmarkPost, Post
@@ -21,12 +22,25 @@ def user_profile(request, username: str):
     """ Profile page view"""
 
     profile: UserProfile = get_object_or_404(UserProfile, user__username=username)
-    tab = request.GET.get("tab")
-    if tab == "saved":
-        bookmarked_posts = BookmarkPost.objects.filter(user__username=username)
-        posts = [bookmarked_post.post for bookmarked_post in bookmarked_posts]
+    current_user_profile = request.user.userprofile
+    
+    # request should be POST and user cannot follow himself/herself
+    if request.method == "POST" and profile != current_user_profile:
+        data = request.POST
+        action = data.get("follow")
+        if action == "follow":
+            current_user_profile.follows.add(profile)
+        elif action == "unfollow":
+            current_user_profile.follows.remove(profile)
+        current_user_profile.save()
+        return redirect("user_profile", username=username)
     else:
-        posts = Post.objects.filter(user__username=username)
+        tab = request.GET.get("tab")
+        if tab == "saved":
+            bookmarked_posts = BookmarkPost.objects.filter(user__username=username)
+            posts = [bookmarked_post.post for bookmarked_post in bookmarked_posts]
+        else:
+            posts = Post.objects.filter(user__username=username)
     return render(request, "users/user_profile.html", {"profile": profile, "posts": posts, "tab": tab})
 
 
@@ -68,3 +82,41 @@ def user_delete(request):
         request.user.delete()
         return redirect("post_list")
     return render(request, "users/user_delete.html")
+
+
+def follows(request, username):
+    profile: UserProfile = get_object_or_404(UserProfile, user__username=username)
+    current_user_profile = request.user.userprofile
+        
+    # request should be POST and user cannot follow himself/herself
+    if request.method == "POST" and profile != current_user_profile:
+        data = request.POST
+        action = data.get("follow")
+        if action == "follow":
+            current_user_profile.follows.add(profile)
+        elif action == "unfollow":
+            current_user_profile.follows.remove(profile)
+        current_user_profile.save()
+        
+        # obtaining value from hidden field so as to use profile username in the address bar ...
+        # and not the one passed in action attribute in form tag.
+        profile = request.POST.get("profile")
+        # for some reason value from hidden field gets appended with 's , so i've stripped it 
+        profile = profile.split("'")[0]
+
+        return redirect("follows", username=profile)
+    else:
+        tab = request.GET.get("tab")
+        if tab == "followers" or tab == None:
+            # ordered to make sure logged in user is the first in the list of followers
+            follows = profile.followed_by.order_by(Case(When(id=request.user.id, then=0), default=1))
+        elif tab == "following":
+            # ordered to make sure logged in user is the first in the list of following
+            follows = profile.follows.order_by(Case(When(id=request.user.id, then=0), default=1))
+        
+        context = {
+            "follows": follows,
+            "profile": profile,
+            "tab": tab,
+        }
+        return render(request, "users/follows.html", context)
