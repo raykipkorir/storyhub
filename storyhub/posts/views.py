@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from django.views.generic import CreateView, ListView
 from users.models import UserProfile
+from users.utils import follow_functionality
 
 from .forms import PostForm
 from .models import Post
@@ -52,11 +53,7 @@ def post_detail_view(request, username, slug):
         if request.method == "POST" and profile != current_user_profile and current_user_profile:
             data = request.POST
             action = data.get("follow")
-            if action == "follow":
-                current_user_profile.follows.add(profile)
-            elif action == "unfollow":
-                current_user_profile.follows.remove(profile)
-            current_user_profile.save()
+            follow_functionality(action=action, profile=profile, current_user_profile=current_user_profile)
             return redirect("post_detail", username=username, slug=post.slug)
         else:
             return render(request, "posts/post_detail.html", {"post": post, "profile": profile})
