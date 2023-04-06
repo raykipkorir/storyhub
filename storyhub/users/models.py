@@ -49,6 +49,10 @@ class UserProfile(models.Model):
     personal_website = models.URLField(verbose_name="Website", blank=True, null=True)
     profile_pic = models.ImageField(upload_to="profile_pics", blank=True, null=True)
     
+    # symmetrical=False so that users can follow someone without them following back
+    # blank=True users don't need to follow anyone
+    follows = models.ManyToManyField("self", related_name="followed_by", symmetrical=False, blank=True)
+    
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):

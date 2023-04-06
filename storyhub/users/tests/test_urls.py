@@ -20,3 +20,7 @@ class TestUserUrls(SimpleTestCase):
     def test_user_delete_url(self) -> None:
         url: str = reverse("user_delete")
         self.assertEqual(resolve(url).func, views.user_delete)
+
+    def test_follows_url(self) -> None:
+        url: str = reverse("follows", kwargs={"username": "john"})
+        self.assertEqual(resolve(url).func, views.follows)
