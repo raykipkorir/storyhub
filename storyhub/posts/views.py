@@ -40,10 +40,16 @@ def post_detail_view(request, username, slug):
         post = get_object_or_404(User, username=username).post_set.all().get(slug=slug)
 
         profile: UserProfile = get_object_or_404(UserProfile, user__username=username)
-        current_user_profile = request.user.userprofile
+
+        # differentiating between anonymous user and logged-in user
+        if hasattr(request.user, "userprofile"):
+            current_user_profile = request.user.userprofile
+        else:
+            current_user_profile = None
+            
         # request should be POST and user cannot follow himself/herself
         # same follow functionality as the one implemented in users app
-        if request.method == "POST" and profile != current_user_profile:
+        if request.method == "POST" and profile != current_user_profile and current_user_profile:
             data = request.POST
             action = data.get("follow")
             if action == "follow":
