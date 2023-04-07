@@ -198,3 +198,5 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # post title min length
 POST_TITLE_MIN_LENGTH = 5
+
+CSRF_TRUSTED_ORIGINS = ["https://storyhub.up.railway.app"]
