@@ -13,4 +13,6 @@ urlpatterns = [
 
     path("<int:pk>/bookmark/", views.ReactionView.as_view(model=BookmarkPost), name="post_bookmark"),
     path("<int:pk>/like/", views.ReactionView.as_view(model=LikePost), name="post_like"),
+
+    path("search/", views.search_posts, name="search_posts"),
 ]
