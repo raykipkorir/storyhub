@@ -6,7 +6,7 @@
 Post Detail
 {% endblock title %}
 {% block content %}
-<div class="row">
+<div class="row mt-5">
    {% comment %} post {% endcomment %}
    <div class="col-md-7 offset-md-1 border">
       <div class="row">
@@ -53,7 +53,7 @@ Post Detail
                      </div>
                   </div>
                   {% comment %} icons  {% endcomment %}
-                  <div class="d-flex flex-column align-items-center">
+                  <div class="d-flex align-items-center">
                      <ul id="icons" class="d-flex gap-3 mb-1 fs-5" data-id="{{ post.id }}">
                         <li>
                            {% post_to_twitter "Check this out: {{ post.title }}" object_or_url "<i class='fa-brands fa-twitter'></i>"%}
@@ -72,7 +72,7 @@ Post Detail
                      {% comment %} login to react {% endcomment %}
                      {% if not user.is_authenticated %}
                      <div>
-                        <a href="{% url 'account_login' %}" class="btn btn-primary">Login to react</a>
+                        <a href="{% url 'account_login' %}?next={% url 'post_detail' post.user.username post.slug %}" class="btn btn-primary">Login to react</a>
                      </div>
                      {% endif %}
                   </div>
@@ -108,7 +108,10 @@ Post Detail
          <div class="col">
             <div class="d-flex flex-column">
                {% comment %} get unlimited access {% endcomment %}
-               <a href="" class="btn btn-success fs-5 my-5 rounded-pill">Get unlimited access</a>
+               <div class="mt-5 mb-3">
+                  <a href="" class="btn btn-success fs-5 rounded-pill">Get unlimited access</a>
+                  <p class="text-muted m-0 ms-2">Coming soon</p>
+               </div>
                <a href="{% url 'user_profile' post.user.username %}">
                {% comment %} profile pic {% endcomment %}
                {% if post.user.userprofile.profile_pic %}
@@ -154,6 +157,9 @@ Post Detail
                      <button type="submit" class="btn btn-success rounded-pill px-4" name="follow" value="follow">
                      Follow
                      </button>
+                     {% if not user.is_authenticated %}
+                     <p class="text-muted">Login to follow</p>
+                     {% endif %}
                      {% endif %}
                   </div>
                </form>

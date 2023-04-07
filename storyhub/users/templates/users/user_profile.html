@@ -51,6 +51,9 @@ Profile page - StoryHub Community
                <button type="submit" class="btn btn-success rounded-pill px-4" name="follow" value="follow">
                Follow
                </button>
+               {% if not user.is_authenticated %}
+               <p class="text-muted">Login to follow</p>
+               {% endif %}
                {% endif %}
             </div>
          </form>
