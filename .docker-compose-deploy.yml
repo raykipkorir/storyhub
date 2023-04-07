@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+
+  web:
+    build: 
+      context: .
+    image: storyhub:1.0.0
+    command: sh entrypoint.sh
+    ports:
+      - "80:80"
+      
