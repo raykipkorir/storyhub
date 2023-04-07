@@ -5,8 +5,7 @@ services:
   web:
     build: 
       context: .
-    image: storyhub:1.0.0
+    image: storyhub:latest
     command: sh entrypoint.sh
     ports:
       - "80:80"
-      
