@@ -9,6 +9,7 @@ from posts.models import BookmarkPost, Post
 
 from .forms import UserProfileForm, UserSignUpForm, UserUpdateForm
 from .models import UserProfile
+from .utils import follow_functionality
 
 
 # overriding allauth's default signup view to use custom form
@@ -33,10 +34,7 @@ def user_profile(request, username: str):
     if request.method == "POST" and profile != current_user_profile and current_user_profile:
         data = request.POST
         action = data.get("follow")
-        if action == "follow":
-            current_user_profile.follows.add(profile)
-        elif action == "unfollow":
-            current_user_profile.follows.remove(profile)
+        follow_functionality(action=action, profile=profile, current_user_profile=current_user_profile)
         current_user_profile.save()
         return redirect("user_profile", username=username)
     else:
@@ -102,10 +100,7 @@ def follows(request, username):
     if request.method == "POST" and profile != current_user_profile and current_user_profile:
         data = request.POST
         action = data.get("follow")
-        if action == "follow":
-            current_user_profile.follows.add(profile)
-        elif action == "unfollow":
-            current_user_profile.follows.remove(profile)
+        follow_functionality(action=action, profile=profile, current_user_profile=current_user_profile)
         current_user_profile.save()
         
         # obtaining value from hidden field so as to use profile username in the address bar ...
