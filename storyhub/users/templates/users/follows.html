@@ -103,7 +103,10 @@ Follows - StoryHub Community
          <div class="col">
             <div class="d-flex flex-column">
                {% comment %} get unlimited access {% endcomment %}
-               <a href="" class="btn btn-success fs-5 my-5 rounded-pill">Get unlimited access</a>
+               <div class="mt-5 mb-3">
+                  <a href="" class="btn btn-success fs-5 rounded-pill">Get unlimited access</a>
+                  <p class="text-muted m-0 ms-2">Coming soon</p>
+               </div>
                <a href="{% url 'user_profile' profile.user.username %}">
                {% comment %} profile pic {% endcomment %}
                {% if profile.profile_pic %}
@@ -162,6 +165,9 @@ Follows - StoryHub Community
                      <button type="submit" class="btn btn-success rounded-pill px-4" name="follow" value="follow">
                      Follow
                      </button>
+                     {% if not user.is_authenticated %}
+                     <p class="text-muted">Login to follow</p>
+                     {% endif %}
                      {% endif %}
                   </div>
                </form>

@@ -129,3 +129,12 @@ class ReactionView(LoginRequiredMixin, View):
                 "count": self.model.objects.filter(post_id=pk).count()
             })
         )
+
+
+def search_posts(request):
+    if "q" in request.GET:
+        query = request.GET.get("q")
+        posts = Post.objects.filter(title__icontains=query)
+    else:
+        posts = Post.objects.all() 
+    return render(request, "posts/post_list.html", {"posts":posts})
