@@ -20,11 +20,13 @@ const reactions = document.querySelectorAll(".reaction");
 const icons = document.getElementById("icons");
 const post_id = icons.dataset.id;
 
+const domain = "https://storyhub.up.railway.app";
+
 // adding event listener to like and bookmark
 for (let reaction of reactions) {
   reaction.addEventListener("click", (event) => {
     const action = event.target.getAttribute("data-action");
-    let url = `http://localhost:8000/${post_id}/${action}/`;
+    let url = `${domain}/${post_id}/${action}/`;
 
     let options = {
       method: "POST",
@@ -56,7 +58,7 @@ for (let reaction of reactions) {
 window.addEventListener("DOMContentLoaded", (event) => {
   // bookmark
   let bookmark = document.getElementById("bookmark_id");
-  let bookmarkUrl = `http://localhost:8000/${post_id}/bookmark/`;
+  let bookmarkUrl = `${domain}/${post_id}/bookmark/`;
   fetch(bookmarkUrl, {
     method: "GET",
   })
@@ -68,7 +70,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
     });
 
   // like
-  let likeUrl = `http://localhost:8000/${post_id}/like/`;
+  let likeUrl = `${domain}/${post_id}/like/`;
   let like = document.getElementById("like_id");
   fetch(likeUrl, {
     method: "GET",
