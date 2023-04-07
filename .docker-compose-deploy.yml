@@ -6,6 +6,7 @@ services:
     build: 
       context: .
     image: storyhub:latest
+    restart: always
     command: sh entrypoint.sh
     ports:
       - "80:80"
