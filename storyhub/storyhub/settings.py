@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
     
-    # "ckeditor"
+    "django_social_share",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
