@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 {% load markdown_extras %}
 {% load static %}
+{% load cache %}
 {% block title %}
 StoryHub Community
 {% endblock title %}
 {% block content %}
+{% cache 900 posts_content %}
 <div class="row mt-5 ms-5">
    <div class="col-md-8">
       {% for post in posts %}
@@ -64,4 +66,5 @@ StoryHub Community
       {% endfor %}
    </div>
 </div>
+{% endcache %}
 {% endblock content %}

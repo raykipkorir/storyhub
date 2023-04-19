@@ -4,6 +4,7 @@ from django.contrib import auth
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -32,6 +33,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        cache.clear()
         return super().form_valid(form)
 
 
@@ -54,6 +56,7 @@ def post_detail_view(request, username, slug):
             data = request.POST
             action = data.get("follow")
             follow_functionality(action=action, profile=profile, current_user_profile=current_user_profile)
+            cache.clear()
             return redirect("post_detail", username=username, slug=post.slug)
         else:
             return render(request, "posts/post_detail.html", {"post": post, "profile": profile})
@@ -72,6 +75,7 @@ def post_update_view(request, username, slug):
                 form = PostForm(request.POST, request.FILES, instance=post)
                 if form.is_valid():
                     form.save()
+                    cache.clear()
                     return redirect("post_detail", username=request.user.username, slug=post.slug)
             return render(request, "posts/post_update.html", {"post": post})
         else:
@@ -88,6 +92,7 @@ def post_delete_view(request, username, slug):
         if request.user == post.user:
             if request.method == "POST":
                 post.delete()
+                cache.clear()
                 return redirect("user_profile", username=request.user.username)
         else:
             return redirect("post_list")
