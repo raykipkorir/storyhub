@@ -38,6 +38,8 @@ jobs:
         DEBUG: false
         ALLOWED_HOSTS: http://127.0.0.1:8000
         SECRET_KEY: ci_cd_test_key
+        CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         REDIS_URL: redis://127.0.0.1:6379
       run: |
         cd storyhub
