@@ -29,7 +29,7 @@ SECRET_KEY = config("SECRET_KEY", default="my_secret_key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='', cast=Csv())
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
 # Application definition
 
@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     
     "django_social_share",
+
+    "debug_toolbar",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -63,6 +65,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -200,3 +203,20 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 POST_TITLE_MIN_LENGTH = 5
 
 CSRF_TRUSTED_ORIGINS = ["https://storyhub.up.railway.app"]
+
+
+# cache configuration
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": config("REDIS_URL"),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]

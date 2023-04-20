@@ -14,7 +14,11 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: [3.9]
-
+    services:
+      redis_cache:
+        image: redis
+        ports:
+          - 6379:6379
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -30,6 +34,11 @@ jobs:
         pip install -r requirements.txt
         
     - name: Run Tests
+      env:
+        DEBUG: false
+        ALLOWED_HOSTS: http://127.0.0.1:8000
+        SECRET_KEY: ci_cd_test_key
+        REDIS_URL: redis://127.0.0.1:6379
       run: |
         cd storyhub
         python manage.py test

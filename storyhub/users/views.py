@@ -2,6 +2,7 @@ from allauth.account.models import EmailAddress
 from allauth.account.views import SignupView
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 from django.db.models import Case, When
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -36,6 +37,7 @@ def user_profile(request, username: str):
         action = data.get("follow")
         follow_functionality(action=action, profile=profile, current_user_profile=current_user_profile)
         current_user_profile.save()
+        cache.clear()
         return redirect("user_profile", username=username)
     else:
         tab = request.GET.get("tab")
@@ -58,6 +60,7 @@ def profile_update(request):
         form = UserProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
+            cache.clear()
             messages.success(request, "Profile updated successfully")
             return redirect("user_update")
         
@@ -73,6 +76,7 @@ def user_update(request):
         form = UserUpdateForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
+            cache.clear()
             messages.success(request, "User updated successfully")
             return redirect("user_update")
         
@@ -83,6 +87,7 @@ def user_update(request):
 def user_delete(request):
     if request.method == "POST":
         request.user.delete()
+        cache.clear()
         return redirect("post_list")
     return render(request, "users/user_delete.html")
 
@@ -109,6 +114,7 @@ def follows(request, username):
         # for some reason value from hidden field gets appended with 's , so i've stripped it 
         profile = profile.split("'")[0]
 
+        cache.clear()
         return redirect("follows", username=profile)
     else:
         tab = request.GET.get("tab")
