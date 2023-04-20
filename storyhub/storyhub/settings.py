@@ -67,6 +67,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -146,6 +147,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
@@ -178,8 +180,8 @@ SOCIALACCOUNT_PROVIDERS = {
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
         'APP': {
-            # 'client_id': config("CLIENT_ID"),
-            # 'secret': config("CLIENT_SECRET"),
+            'client_id': config("CLIENT_ID"),
+            'secret': config("CLIENT_SECRET"),
         },
         'SCOPE':[
             'profile',
