@@ -43,6 +43,7 @@ jobs:
         REDIS_URL: redis://127.0.0.1:6379
       run: |
         cd storyhub
+        python manage.py collectstatic --no-input
         python manage.py test
         
     - name: Login to Docker Hub
