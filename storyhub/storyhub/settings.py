@@ -178,8 +178,8 @@ SOCIALACCOUNT_PROVIDERS = {
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
         'APP': {
-            # 'client_id': config("CLIENT_ID"),
-            # 'secret': config("CLIENT_SECRET"),
+            'client_id': config("CLIENT_ID"),
+            'secret': config("CLIENT_SECRET"),
         },
         'SCOPE':[
             'profile',
