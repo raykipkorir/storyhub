@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 
+import cloudinary
 from decouple import Csv, config
 from dj_database_url import parse as db_url
 
@@ -58,6 +59,8 @@ INSTALLED_APPS = [
     "django_social_share",
 
     "debug_toolbar",
+
+    "cloudinary",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -222,3 +225,11 @@ CACHES = {
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+# cloudinary configurations
+cloudinary.config(
+  cloud_name = config("CLOUDINARY_CLOUD_NAME"),
+  api_key = config("CLOUDINARY_API_KEY"),
+  api_secret = config("CLOUDINARY_API_SECRET"),
+  secure = True
+)

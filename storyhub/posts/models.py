@@ -1,3 +1,4 @@
+from cloudinary.models import CloudinaryField
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
@@ -9,7 +10,7 @@ class Post(models.Model):
     title = models.CharField(max_length=50)
     content = models.TextField()
     slug = models.SlugField()
-    cover_image = models.ImageField(upload_to="posts_cover_pics", blank=True, null=True)
+    cover_image = CloudinaryField("post_cover_images", blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
