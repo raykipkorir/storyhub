@@ -1,10 +1,9 @@
-from django.utils import timezone
+from cloudinary.models import CloudinaryField
 from django.contrib.auth.models import (AbstractBaseUser, PermissionsMixin,
                                         UserManager)
 from django.db import models
 from django.urls import reverse
-from PIL import Image
-
+from django.utils import timezone
 
 # custom user
 class User(AbstractBaseUser, PermissionsMixin):
@@ -47,9 +46,9 @@ class UserProfile(models.Model):
     location = models.CharField(max_length=20, blank=True, null=True)
     twitter_url = models.URLField(verbose_name="Twitter", blank=True, null=True)
     personal_website = models.URLField(verbose_name="Website", blank=True, null=True)
-    profile_pic = models.ImageField(upload_to="profile_pics", blank=True, null=True)
+    profile_pic = CloudinaryField("profile_pics", blank=True, null=True)
     
-    # symmetrical=False so that users can follow someone without them following back
+    # symmetrical=False so that users can follow someone without them following back automatically
     # blank=True users don't need to follow anyone
     follows = models.ManyToManyField("self", related_name="followed_by", symmetrical=False, blank=True)
     
@@ -63,23 +62,3 @@ class UserProfile(models.Model):
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-
-        if self.profile_pic:
-            img = Image.open(self.profile_pic.path)
-
-            def crop_center(pil_img, crop_width, crop_height):
-                img_width, img_height = pil_img.size
-                return pil_img.crop(
-                    (
-                        (img_width - crop_width) // 2,
-                        (img_height - crop_height) // 2,
-                        (img_width + crop_width) // 2,
-                        (img_height + crop_height) // 2,
-                    )
-                )
-
-            def crop_max_square(pil_img):
-                return crop_center(pil_img, min(pil_img.size), min(pil_img.size))
-
-            im_thumb = crop_max_square(img).resize((300, 300), Image.LANCZOS)
-            im_thumb.save(self.profile_pic.path, quality=95)
