@@ -201,7 +201,12 @@ ACCOUNT_MAX_EMAIL_ADDRESSES = 2
 ACCOUNT_USERNAME_BLACKLIST = ["admin"]
 
 # email configurations
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = config("EMAIL_HOST")
+EMAIL_PORT = config("EMAIL_PORT")
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+EMAIL_USE_SSL = config("EMAIL_USE_SSL", default=True)
 
 
 # post title min length

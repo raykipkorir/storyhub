@@ -43,6 +43,11 @@ jobs:
         CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
         CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
         CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+        EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+        EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+        EMAIL_HOST_USER: ${{ secrets.EMAIL_HOST_USER }}
+        EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
+        EMAIL_USE_SSL: ${{ secrets.EMAIL_USE_SSL }}
         REDIS_URL: redis://127.0.0.1:6379
       run: |
         cd storyhub
