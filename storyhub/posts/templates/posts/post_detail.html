@@ -55,6 +55,11 @@ Post Detail
                   {% comment %} icons  {% endcomment %}
                   <div class="d-flex align-items-center">
                      <ul id="icons" class="d-flex gap-3 mb-1 fs-5" data-id="{{ post.id }}">
+                        {% comment %} number of views {% endcomment %}
+                        <li>
+                           <i class="fa-regular fa-eye"></i> {{ view_count }}
+                        </li>
+                        {% comment %} share to twitter {% endcomment %}
                         <li>
                            {% post_to_twitter "Check this out: {{ post.title }}" object_or_url "<i class='fa-brands fa-twitter'></i>"%}
                         </li>

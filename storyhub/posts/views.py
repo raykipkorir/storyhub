@@ -14,7 +14,7 @@ from users.models import UserProfile
 from users.utils import follow_functionality
 
 from .forms import PostForm
-from .models import Post
+from .models import Post, PostViews
 
 User = get_user_model()
 
@@ -59,7 +59,11 @@ def post_detail_view(request, username, slug):
             cache.clear()
             return redirect("post_detail", username=username, slug=post.slug)
         else:
-            return render(request, "posts/post_detail.html", {"post": post, "profile": profile})
+            # number of post views
+            PostViews.objects.create(post=post)
+            view_count = PostViews.objects.filter(post=post).count()
+            context = {"post": post, "profile": profile, "view_count": view_count}
+            return render(request, "posts/post_detail.html", context)
     except ObjectDoesNotExist:
         raise Http404
     
