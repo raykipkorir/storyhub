@@ -5,7 +5,7 @@
 [![Django CI/CD](https://github.com/raykipkorir/storyhub/actions/workflows/django.yml/badge.svg?event=push)](https://github.com/raykipkorir/storyhub/actions/workflows/django.yml)
 
 ## Overview
-StoryHub is a CMS platform build with Django where its users can read and publish articles.
+StoryHub is a CMS platform built with Django where its users can read and publish articles.
 
 ## Security
 - The site is protected against CSRF attacks. It utilizes Django's Built in CSRF protection.
