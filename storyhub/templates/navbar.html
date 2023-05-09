@@ -8,7 +8,21 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        {% include 'search.html' %}
+        <li class="nav-item">
+          {% include 'search.html' %}
+        </li>
+        <li class="nav-item mt-2 ms-2">
+          <a 
+            class="github-button" 
+            href="https://github.com/raykipkorir/storyhub" 
+            data-color-scheme="no-preference: dark; light: light; dark: dark;" 
+            data-icon="octicon-star" 
+            aria-label="Star raykipkorir/storyhub on GitHub"
+            class="m-1"
+            >
+            Star on github
+          </a> 
+        </li>
       </ul>
       {% if user.is_authenticated %}
       <ul class="navbar-nav mb-2 mb-lg-0">
