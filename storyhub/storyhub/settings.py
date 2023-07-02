@@ -14,8 +14,10 @@ import os
 from pathlib import Path
 
 import cloudinary
+import sentry_sdk
 from decouple import Csv, config
 from dj_database_url import parse as db_url
+from sentry_sdk.integrations.django import DjangoIntegration
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -237,4 +239,15 @@ cloudinary.config(
   api_key = config("CLOUDINARY_API_KEY"),
   api_secret = config("CLOUDINARY_API_SECRET"),
   secure = True
+)
+
+
+# sentry integration
+sentry_sdk.init(
+    dsn=config("SENTRY_DSN"),
+    integrations=[
+        DjangoIntegration(),
+    ],
+    traces_sample_rate=1.0,
+    send_default_pii=True
 )
