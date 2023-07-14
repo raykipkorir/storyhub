@@ -193,6 +193,9 @@ SOCIALACCOUNT_PROVIDERS = {
             'email',
             'openid',
         ],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        }
     }
 }
 
@@ -214,7 +217,7 @@ EMAIL_USE_SSL = config("EMAIL_USE_SSL", default=True)
 # post title min length
 POST_TITLE_MIN_LENGTH = 5
 
-CSRF_TRUSTED_ORIGINS = ["https://storyhub.up.railway.app"]
+CSRF_TRUSTED_ORIGINS = ["https://storyhub.up.railway.app", "https://8e08-102-215-76-91.ngrok-free.app"]
 
 
 # cache configuration
