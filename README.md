@@ -14,4 +14,4 @@ StoryHub is a CMS platform built with Django where its users can read and publis
 ## Contribution
 Feel free to contribute to the project to make it better.
 
-Visit [StoryHub](https://storyhub.up.railway.app)
+Visit [StoryHub](https://storyhub-spaj.onrender.com/)
