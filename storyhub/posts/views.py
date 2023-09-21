@@ -1,4 +1,5 @@
 import json
+from typing import Any
 
 from django.contrib import auth
 from django.contrib.auth import get_user_model
@@ -6,7 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, HttpResponse
+from django.db.models.query import QuerySet
+from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from django.views.generic import CreateView, ListView
@@ -25,6 +27,9 @@ class PostListView(ListView):
     template_name = "posts/post_list.html"
     context_object_name = "posts"
 
+    def get_queryset(self) -> QuerySet[Any]:
+        posts = Post.objects.select_related("user").all()
+        return posts
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
@@ -40,10 +45,8 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 def post_detail_view(request, username, slug):
     # check if post exists if not raise Http404
     try:
-        post = get_object_or_404(User, username=username).post_set.all().get(slug=slug)
-
-        profile: UserProfile = get_object_or_404(UserProfile, user__username=username)
-
+        post = Post.objects.select_related("user").get(slug=slug)
+        profile = UserProfile.objects.select_related("user").get(user__username=username)
         # differentiating between anonymous user and logged-in user
         if hasattr(request.user, "userprofile"):
             current_user_profile = request.user.userprofile
@@ -72,7 +75,7 @@ def post_detail_view(request, username, slug):
 def post_update_view(request, username, slug):
     # check if post exists if not raise Http404
     try:
-        post = get_object_or_404(User, username=username).post_set.all().get(slug=slug)
+        post = Post.objects.select_related("user").get(slug=slug)
         if request.user == post.user:
             form = PostForm(instance=post)
             if request.method == "POST":
@@ -92,7 +95,7 @@ def post_update_view(request, username, slug):
 def post_delete_view(request, username, slug):
     # check if post exists if not raise Http404
     try:
-        post = get_object_or_404(User, username=username).post_set.all().get(slug=slug)
+        post = Post.objects.select_related("user").get(slug=slug)
         if request.user == post.user:
             if request.method == "POST":
                 post.delete()
@@ -143,7 +146,7 @@ class ReactionView(LoginRequiredMixin, View):
 def search_posts(request):
     if "q" in request.GET:
         query = request.GET.get("q")
-        posts = Post.objects.filter(title__icontains=query)
+        posts = Post.objects.select_related("user").filter(title__icontains=query)
     else:
-        posts = Post.objects.all() 
+        posts = Post.objects.select_related("user").all()
     return render(request, "posts/post_list.html", {"posts":posts})

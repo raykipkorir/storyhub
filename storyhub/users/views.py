@@ -4,7 +4,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.db.models import Case, When
-from django.shortcuts import get_object_or_404, redirect, render
+from django.http import Http404
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from posts.models import BookmarkPost, Post
 
@@ -22,9 +23,10 @@ class UserSignUpView(SignupView):
 
 def user_profile(request, username: str):
     """ Profile page view"""
-
-    profile: UserProfile = get_object_or_404(UserProfile, user__username=username)
-
+    try:
+        profile = UserProfile.objects.select_related("user").get(user__username=username)
+    except UserProfile.DoesNotExist:
+        raise Http404
     # differentiating between anonymous user and logged-in user
     if hasattr(request.user, "userprofile"):
         current_user_profile = request.user.userprofile
@@ -42,10 +44,10 @@ def user_profile(request, username: str):
     else:
         tab = request.GET.get("tab")
         if tab == "saved":
-            bookmarked_posts = BookmarkPost.objects.filter(user__username=username)
+            bookmarked_posts = BookmarkPost.objects.select_related("post", "user").filter(user__username=username)
             posts = [bookmarked_post.post for bookmarked_post in bookmarked_posts]
         else:
-            posts = Post.objects.filter(user__username=username)
+            posts = Post.objects.select_related("user").filter(user__username=username)
     return render(request, "users/user_profile.html", {"profile": profile, "posts": posts, "tab": tab})
 
 
@@ -53,7 +55,7 @@ def user_profile(request, username: str):
 def profile_update(request):
     """ View for updating user's profile"""
 
-    profile = UserProfile.objects.get(user=request.user)
+    profile = UserProfile.objects.select_related("user").get(user=request.user)
     form = UserProfileForm(instance=profile)
 
     if request.method == "POST":
@@ -93,8 +95,11 @@ def user_delete(request):
 
 
 def follows(request, username):
-    profile: UserProfile = get_object_or_404(UserProfile, user__username=username)
-
+    # profile: UserProfile = get_object_or_404(UserProfile, user__username=username)
+    try:
+        profile = UserProfile.objects.select_related("user").get(user__username=username)
+    except UserProfile.DoesNotExist:
+        raise Http404
     # differentiating between anonymous user and logged-in user
     if hasattr(request.user, "userprofile"):
         current_user_profile = request.user.userprofile

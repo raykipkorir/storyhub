@@ -9,7 +9,7 @@ User = get_user_model()
 class Post(models.Model):
     title = models.CharField(max_length=50)
     content = models.TextField()
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     cover_image = CloudinaryField("post_cover_images", blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
