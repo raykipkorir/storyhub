@@ -180,22 +180,15 @@ AUTHENTICATION_BACKENDS = [
 
 # Provider specific settings
 SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        # For each OAuth based provider, either add a ``SocialApp``
-        # (``socialaccount`` app) containing the required client
-        # credentials, or list them here:
-        'APP': {
-            'client_id': config("CLIENT_ID"),
-            'secret': config("CLIENT_SECRET"),
-        },
-        'SCOPE':[
-            'profile',
-            'email',
-            'openid',
+    "google": {
+        "SCOPE": [
+            "profile",
+            "email",
+            "openid",
         ],
         "AUTH_PARAMS": {
-            "access_type": "online",
-        }
+            "access_type": "offline",
+        },
     }
 }
 
@@ -217,8 +210,10 @@ EMAIL_USE_SSL = config("EMAIL_USE_SSL", default=True)
 # post title min length
 POST_TITLE_MIN_LENGTH = 5
 
-CSRF_TRUSTED_ORIGINS = ["https://storyhub.up.railway.app", "https://8e08-102-215-76-91.ngrok-free.app"]
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', cast=Csv())
 
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # cache configuration
 # CACHES = {
@@ -234,6 +229,7 @@ CSRF_TRUSTED_ORIGINS = ["https://storyhub.up.railway.app", "https://8e08-102-215
 
 INTERNAL_IPS = [
     "127.0.0.1",
+    "localhost",
 ]
 
 # cloudinary configurations

@@ -11,6 +11,6 @@ RUN pip install -r requirements.txt
 
 COPY . /app/
 
-COPY ./entrypoint.sh /app/
-
-ENTRYPOINT [ "sh", "entrypoint.sh" ]
+COPY ./start.sh /start.sh
+RUN sed -i 's/\r$//' /start.sh && \
+    chmod +x /start.sh

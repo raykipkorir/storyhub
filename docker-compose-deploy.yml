@@ -5,8 +5,9 @@ services:
   web:
     build: 
       context: .
-    image: storyhub:latest
     restart: always
-    command: sh entrypoint.sh
+    command: ["sh", "-c", "/start.sh"]
     ports:
-      - "80:80"
+      - "8000:8000"
+    env_file:
+      - .env
