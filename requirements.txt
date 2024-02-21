@@ -14,7 +14,7 @@ cloudinary==1.32.0
 colorama==0.4.6
 coverage==7.4.2
 crispy-bootstrap5==0.7
-cryptography==42.0.2
+cryptography==42.0.4
 defusedxml==0.7.1
 dj-database-url==1.3.0
 Django==4.1.13
