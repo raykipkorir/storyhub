@@ -20,7 +20,7 @@ const reactions = document.querySelectorAll(".reaction");
 const icons = document.getElementById("icons");
 const post_id = icons.dataset.id;
 
-const domain = "https://storyhub.up.railway.app";
+const domain = "https://storyhub-spaj.onrender.com";
 
 // adding event listener to like and bookmark
 for (let reaction of reactions) {
@@ -40,6 +40,12 @@ for (let reaction of reactions) {
     fetch(url, options)
       .then((res) => res.json())
       .then((data) => {
+        if (!data.authenticated && action == "bookmark") {
+          alert("Login to bookmark the article");
+        }
+        if (!data.authenticated && action == "like") {
+          alert("Login to like the article");
+        }
         const created = data.created;
         if (action === "bookmark") {
           created

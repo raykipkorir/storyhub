@@ -74,12 +74,6 @@ Post Detail
                            >
                         </li>
                      </ul>
-                     {% comment %} login to react {% endcomment %}
-                     {% if not user.is_authenticated %}
-                     <div>
-                        <a href="{% url 'account_login' %}?next={% url 'post_detail' post.user.username post.slug %}" class="btn btn-primary">Login to react</a>
-                     </div>
-                     {% endif %}
                   </div>
                   {% comment %} edit and delete post {% endcomment %}
                   {% if user == post.user %}
