@@ -1,7 +1,6 @@
 import json
 from typing import Any
 
-from django.contrib import auth
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -16,7 +15,7 @@ from users.models import UserProfile
 from users.utils import follow_functionality
 
 from .forms import PostForm
-from .models import Post, PostViews
+from .models import LikePost, Post, PostViews
 
 User = get_user_model()
 
@@ -112,37 +111,62 @@ def post_delete_view(request, username, slug):
         raise Http404
 
 
-class ReactionView(LoginRequiredMixin, View):
-    model = None
+class ReactionView(View):
+    model = LikePost
 
     def post(self, request, pk):
-        # We need a user
-        user = auth.get_user(request)
-        # Trying to get a obj from the table, or create a new one
-        obj, created = self.model.objects.get_or_create(user=user, post_id=pk)
-        # If no new obj has been created,
-        # Then we believe that the request was to delete the obj
-        if not created:
-            obj.delete()
+        if request.user.is_authenticated:
+            # Trying to get a obj from the table, or create a new one
+            obj, created = self.model.objects.get_or_create(
+                user=request.user, post_id=pk
+            )
+            # If no new obj has been created,
+            # Then we believe that the request was to delete the obj
+            if not created:
+                obj.delete()
 
+            return HttpResponse(
+                json.dumps(
+                    {
+                        "authenticated": True,
+                        "created": created,
+                        "count": self.model.objects.filter(post_id=pk).count(),
+                    }
+                ),
+                content_type="application/json",
+            )
         return HttpResponse(
-            json.dumps({
-                "created": created,
-                "count": self.model.objects.filter(post_id=pk).count()
-            }),
-            content_type="application/json"
+            json.dumps(
+                {
+                    "authenticated": False,
+                    "created": False,
+                    "count": self.model.objects.filter(post_id=pk).count(),
+                }
+            ),
+            content_type="application/json",
         )
 
     # get requests are sent on DOMContentLoad to retrieve reaction status
     def get(self, request, pk):
-        user = auth.get_user(request)
-        # checking the current logged in user has liked or bookmarked a post
-        obj = self.model.objects.filter(user=user, post_id=pk).exists()
+        if request.user.is_authenticated:
+            # checking the current logged in user has liked or bookmarked a post
+            obj = self.model.objects.filter(user=request.user, post_id=pk).exists()
+            return HttpResponse(
+                json.dumps(
+                    {
+                        "exists": obj,
+                        "count": self.model.objects.filter(post_id=pk).count(),
+                    }
+                )
+            )
+
         return HttpResponse(
-            json.dumps({
-                "exists": obj,
-                "count": self.model.objects.filter(post_id=pk).count()
-            })
+            json.dumps(
+                {
+                    "exists": False,
+                    "count": self.model.objects.filter(post_id=pk).count(),
+                }
+            )
         )
 
 
