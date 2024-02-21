@@ -14,3 +14,5 @@ COPY . /app/
 COPY ./start.sh /start.sh
 RUN sed -i 's/\r$//' /start.sh && \
     chmod +x /start.sh
+
+ENTRYPOINT [ "sh", "-c", "/start.sh"]
