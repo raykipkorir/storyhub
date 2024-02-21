@@ -6,15 +6,21 @@
 
 ## Overview
 StoryHub is a CMS platform built with Django where its users can read and publish articles.
-Authenticated users can follow and unfollow different writers.
+### Authenticated users priviledges
+- Users can follow and unfollow each other
+- Users can like and bookmark articles
+- Users can write their stories
 
 ## Authentication
-Users can sign in via Google.\
-Sign in via GitHub coming soon.
+- Users can sign in via Google.
+- Sign in via GitHub coming soon.
 
 ## Security
 - The site is protected against CSRF attacks. It utilizes Django's Built in CSRF protection.
 - Users sensitive information such as passwords are hashed using Django's default password hashing algorithm(which is recommended). 
+
+## Tests
+Backend test coverage - 93%
 
 ## Contribution
 Feel free to contribute to the project to make it better.
