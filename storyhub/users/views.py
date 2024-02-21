@@ -24,7 +24,9 @@ class UserSignUpView(SignupView):
 def user_profile(request, username: str):
     """ Profile page view"""
     try:
-        profile = UserProfile.objects.select_related("user").get(user__username=username)
+        profile = UserProfile.objects.select_related("user").get(
+            user__username=username
+        )
     except UserProfile.DoesNotExist:
         raise Http404
     # differentiating between anonymous user and logged-in user
@@ -32,7 +34,7 @@ def user_profile(request, username: str):
         current_user_profile = request.user.userprofile
     else:
         current_user_profile = None
-    
+
     # request should be POST and user cannot follow himself/herself
     if request.method == "POST" and profile != current_user_profile and current_user_profile:
         data = request.POST
@@ -48,7 +50,11 @@ def user_profile(request, username: str):
             posts = [bookmarked_post.post for bookmarked_post in bookmarked_posts]
         else:
             posts = Post.objects.select_related("user").filter(user__username=username)
-    return render(request, "users/user_profile.html", {"profile": profile, "posts": posts, "tab": tab})
+    return render(
+        request,
+        "users/user_profile.html",
+        {"profile": profile, "posts": posts, "tab": tab},
+    )
 
 
 @login_required

@@ -8,8 +8,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.query import QuerySet
-from django.http import Http404, HttpRequest, HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.http import Http404, HttpResponse
+from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic import CreateView, ListView
 from users.models import UserProfile
@@ -23,12 +23,12 @@ User = get_user_model()
 
 class PostListView(ListView):
     model = Post
-    queryset = Post.objects.all
+    queryset = Post.objects.all()
     template_name = "posts/post_list.html"
     context_object_name = "posts"
 
     def get_queryset(self) -> QuerySet[Any]:
-        posts = Post.objects.select_related("user").all()
+        posts = Post.objects.select_related("user__userprofile").all()
         return posts
 
 class PostCreateView(LoginRequiredMixin, CreateView):
@@ -45,14 +45,18 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 def post_detail_view(request, username, slug):
     # check if post exists if not raise Http404
     try:
-        post = Post.objects.select_related("user").get(slug=slug)
-        profile = UserProfile.objects.select_related("user").get(user__username=username)
+        post = Post.objects.prefetch_related("user__userprofile__follows").get(
+            slug=slug
+        )
+        profile = UserProfile.objects.select_related("user").get(
+            user__username=username
+        )
         # differentiating between anonymous user and logged-in user
         if hasattr(request.user, "userprofile"):
             current_user_profile = request.user.userprofile
         else:
             current_user_profile = None
-            
+
         # request should be POST and user cannot follow himself/herself
         # same follow functionality as the one implemented in users app
         if request.method == "POST" and profile != current_user_profile and current_user_profile:
@@ -69,13 +73,13 @@ def post_detail_view(request, username, slug):
             return render(request, "posts/post_detail.html", context)
     except ObjectDoesNotExist:
         raise Http404
-    
+
 
 @login_required
 def post_update_view(request, username, slug):
     # check if post exists if not raise Http404
     try:
-        post = Post.objects.select_related("user").get(slug=slug)
+        post = Post.objects.select_related("user__userprofile").get(slug=slug)
         if request.user == post.user:
             form = PostForm(instance=post)
             if request.method == "POST":
@@ -95,7 +99,7 @@ def post_update_view(request, username, slug):
 def post_delete_view(request, username, slug):
     # check if post exists if not raise Http404
     try:
-        post = Post.objects.select_related("user").get(slug=slug)
+        post = Post.objects.select_related("user__userprofile").get(slug=slug)
         if request.user == post.user:
             if request.method == "POST":
                 post.delete()
@@ -106,12 +110,11 @@ def post_delete_view(request, username, slug):
         return render(request, "posts/post_delete.html", {"post": post})
     except ObjectDoesNotExist:
         raise Http404
- 
- 
+
+
 class ReactionView(LoginRequiredMixin, View):
-    
     model = None
- 
+
     def post(self, request, pk):
         # We need a user
         user = auth.get_user(request)
@@ -121,7 +124,7 @@ class ReactionView(LoginRequiredMixin, View):
         # Then we believe that the request was to delete the obj
         if not created:
             obj.delete()
- 
+
         return HttpResponse(
             json.dumps({
                 "created": created,
@@ -129,7 +132,7 @@ class ReactionView(LoginRequiredMixin, View):
             }),
             content_type="application/json"
         )
-    
+
     # get requests are sent on DOMContentLoad to retrieve reaction status
     def get(self, request, pk):
         user = auth.get_user(request)
@@ -146,7 +149,9 @@ class ReactionView(LoginRequiredMixin, View):
 def search_posts(request):
     if "q" in request.GET:
         query = request.GET.get("q")
-        posts = Post.objects.select_related("user").filter(title__icontains=query)
+        posts = Post.objects.select_related("user__userprofile").filter(
+            title__icontains=query
+        )
     else:
         posts = Post.objects.select_related("user").all()
     return render(request, "posts/post_list.html", {"posts":posts})
