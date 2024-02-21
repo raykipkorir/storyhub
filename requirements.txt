@@ -12,6 +12,7 @@ click-plugins==1.1.1
 click-repl==0.2.0
 cloudinary==1.32.0
 colorama==0.4.6
+coverage==7.4.2
 crispy-bootstrap5==0.7
 cryptography==42.0.2
 defusedxml==0.7.1
@@ -29,7 +30,7 @@ idna==3.4
 kombu==5.2.4
 Markdown==3.4.1
 oauthlib==3.2.2
-Pillow==10.2.0
+pillow==10.2.0
 prompt-toolkit==3.0.38
 psycopg2-binary==2.9.6
 pycparser==2.21
