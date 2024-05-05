@@ -30,6 +30,7 @@ class PostListView(ListView):
         posts = Post.objects.select_related("user__userprofile").all()
         return posts
 
+
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     form_class = PostForm
@@ -58,10 +59,18 @@ def post_detail_view(request, username, slug):
 
         # request should be POST and user cannot follow himself/herself
         # same follow functionality as the one implemented in users app
-        if request.method == "POST" and profile != current_user_profile and current_user_profile:
+        if (
+            request.method == "POST"
+            and profile != current_user_profile
+            and current_user_profile
+        ):
             data = request.POST
             action = data.get("follow")
-            follow_functionality(action=action, profile=profile, current_user_profile=current_user_profile)
+            follow_functionality(
+                action=action,
+                profile=profile,
+                current_user_profile=current_user_profile,
+            )
             cache.clear()
             return redirect("post_detail", username=username, slug=post.slug)
         else:
@@ -86,7 +95,9 @@ def post_update_view(request, username, slug):
                 if form.is_valid():
                     form.save()
                     cache.clear()
-                    return redirect("post_detail", username=request.user.username, slug=post.slug)
+                    return redirect(
+                        "post_detail", username=request.user.username, slug=post.slug
+                    )
             return render(request, "posts/post_update.html", {"post": post})
         else:
             return redirect("post_list")
@@ -178,4 +189,4 @@ def search_posts(request):
         )
     else:
         posts = Post.objects.select_related("user").all()
-    return render(request, "posts/post_list.html", {"posts":posts})
+    return render(request, "posts/post_list.html", {"posts": posts})

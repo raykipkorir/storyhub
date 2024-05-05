@@ -6,7 +6,7 @@ from django.utils.text import slugify
 
 # generate a rondom string to be appended to slug if the slug queried already exists
 def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
-	return ''.join(random.choice(chars) for _ in range(size))
+    return "".join(random.choice(chars) for _ in range(size))
 
 
 # generate a unique slug based on post title

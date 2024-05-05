@@ -17,7 +17,7 @@ StoryHub is a CMS platform built with Django where its users can read and publis
 
 ## Security
 - The site is protected against CSRF attacks. It utilizes Django's Built in CSRF protection.
-- Users sensitive information such as passwords are hashed using Django's default password hashing algorithm(which is recommended). 
+- Users sensitive information such as passwords are hashed using Django's default password hashing algorithm(which is recommended).
 
 ## Tests
 Backend test coverage - 93%

@@ -59,9 +59,16 @@ class TestPostViews(TestCase):
         self.assertTemplateUsed(response, "posts/post_detail.html")
 
     def test_post_detail_view_POST(self) -> None:
-        response = self.client.post(reverse("post_detail", kwargs={"username": "jane", "slug": "my-first-post"}))
+        response = self.client.post(
+            reverse("post_detail", kwargs={"username": "jane", "slug": "my-first-post"})
+        )
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse("post_detail", kwargs={"username": "jane", "slug": "my-first-post"}))
+        self.assertRedirects(
+            response,
+            reverse(
+                "post_detail", kwargs={"username": "jane", "slug": "my-first-post"}
+            ),
+        )
 
     def test_post_update_view_GET(self) -> None:
         response = self.client.get(

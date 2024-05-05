@@ -27,18 +27,18 @@ Post Detail
                      <a href="{% url 'user_profile' post.user.username %}">
                      {% if post.user.userprofile.profile_pic %}
                      <img
-                        src="{{ post.user.userprofile.profile_pic.url }}" 
-                        alt="" 
-                        height="30" 
-                        width="30" 
+                        src="{{ post.user.userprofile.profile_pic.url }}"
+                        alt=""
+                        height="30"
+                        width="30"
                         class="rounded-circle mt-2 "
                         />
                      {% else %}
                      <img
-                        src="{% static 'users/images/default_pic.jpg' %}" 
-                        alt="" 
-                        height="30" 
-                        width="30" 
+                        src="{% static 'users/images/default_pic.jpg' %}"
+                        alt=""
+                        height="30"
+                        width="30"
                         class="rounded-circle mt-2 "
                         />
                      {% endif %}
@@ -63,13 +63,13 @@ Post Detail
                         <li>
                            {% post_to_twitter "Check this out: {{ post.title }}" object_or_url "<i class='fa-brands fa-twitter'></i>"%}
                         </li>
-                        <li 
-                           id="bookmark_id" 
+                        <li
+                           id="bookmark_id"
                            class="reaction"
                            >
                         </li>
                         <li
-                           id="like_id" 
+                           id="like_id"
                            class="reaction"
                            >
                         </li>
@@ -115,18 +115,18 @@ Post Detail
                {% comment %} profile pic {% endcomment %}
                {% if post.user.userprofile.profile_pic %}
                <img
-                  src="{{ post.user.userprofile.profile_pic.url }}" 
-                  alt="" 
-                  height="50" 
-                  width="50" 
+                  src="{{ post.user.userprofile.profile_pic.url }}"
+                  alt=""
+                  height="50"
+                  width="50"
                   class="rounded-circle mt-2 "
                   />
                {% else %}
                <img
-                  src="{% static 'users/images/default_pic.jpg' %}" 
-                  alt="" 
-                  height="50" 
-                  width="50" 
+                  src="{% static 'users/images/default_pic.jpg' %}"
+                  alt=""
+                  height="50"
+                  width="50"
                   class="rounded-circle mt-2 "
                   />
                {% endif %}

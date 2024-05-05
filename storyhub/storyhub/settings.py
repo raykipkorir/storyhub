@@ -32,7 +32,7 @@ SECRET_KEY = config("SECRET_KEY", default="my_secret_key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv())
 
 # Application definition
 
@@ -44,24 +44,18 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
-
     # local apps
     "users.apps.UsersConfig",
     "posts.apps.PostsConfig",
-
     # third party apps
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
-
     "crispy_forms",
     "crispy_bootstrap5",
-    
     "django_social_share",
-
     "debug_toolbar",
-
     "cloudinary",
 ]
 
@@ -106,11 +100,7 @@ WSGI_APPLICATION = "storyhub.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    "default": config(
-        "DATABASE_URL",
-        default="sqlite:///db.sqlite3",
-        cast=db_url
-    )
+    "default": config("DATABASE_URL", default="sqlite:///db.sqlite3", cast=db_url)
 }
 
 # Password validation
@@ -148,9 +138,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static")
-]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
@@ -164,18 +152,17 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 SITE_ID = 1
 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
 LOGIN_URL = "/login/"
 
 AUTH_USER_MODEL = "users.User"
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
-    'django.contrib.auth.backends.ModelBackend',
-
+    "django.contrib.auth.backends.ModelBackend",
     # `allauth` specific authentication methods, such as login by e-mail
-    'allauth.account.auth_backends.AuthenticationBackend',
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 # Provider specific settings
@@ -192,7 +179,7 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-ACCOUNT_FORMS = {'signup': 'users.forms.UserSignUpForm'}
+ACCOUNT_FORMS = {"signup": "users.forms.UserSignUpForm"}
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_MAX_EMAIL_ADDRESSES = 2
@@ -210,7 +197,7 @@ EMAIL_USE_SSL = config("EMAIL_USE_SSL", default=True)
 # post title min length
 POST_TITLE_MIN_LENGTH = 5
 
-CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', cast=Csv())
+CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", cast=Csv())
 
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
@@ -234,10 +221,10 @@ INTERNAL_IPS = [
 
 # cloudinary configurations
 cloudinary.config(
-  cloud_name = config("CLOUDINARY_CLOUD_NAME"),
-  api_key = config("CLOUDINARY_API_KEY"),
-  api_secret = config("CLOUDINARY_API_SECRET"),
-  secure = True
+    cloud_name=config("CLOUDINARY_CLOUD_NAME"),
+    api_key=config("CLOUDINARY_API_KEY"),
+    api_secret=config("CLOUDINARY_API_SECRET"),
+    secure=True,
 )
 
 
@@ -248,5 +235,5 @@ sentry_sdk.init(
         DjangoIntegration(),
     ],
     traces_sample_rate=1.0,
-    send_default_pii=True
+    send_default_pii=True,
 )

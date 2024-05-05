@@ -5,10 +5,10 @@ services:
   web:
     build:
       context: .
-    command: 
-      - sh 
-      - -c 
-      - | 
+    command:
+      - sh
+      - -c
+      - |
         cd storyhub
         python manage.py migrate --no-input
         python manage.py runserver 0.0.0.0:8000
@@ -16,4 +16,3 @@ services:
       - 8000:8000
     volumes:
       - .:/app
-      

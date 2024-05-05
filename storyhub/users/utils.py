@@ -1,4 +1,3 @@
-
 # follow functionality
 def follow_functionality(action, profile, current_user_profile) -> None:
     if action == "follow":
