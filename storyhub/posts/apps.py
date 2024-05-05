@@ -7,4 +7,3 @@ class PostsConfig(AppConfig):
 
     def ready(self):
         from . import signals
-        

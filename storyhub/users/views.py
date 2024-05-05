@@ -16,13 +16,13 @@ from .utils import follow_functionality
 
 # overriding allauth's default signup view to use custom form
 class UserSignUpView(SignupView):
-    template_name = 'account/signup.html'
+    template_name = "account/signup.html"
     form_class = UserSignUpForm
-    success_url = reverse_lazy('account_login')
+    success_url = reverse_lazy("account_login")
 
 
 def user_profile(request, username: str):
-    """ Profile page view"""
+    """Profile page view"""
     try:
         profile = UserProfile.objects.select_related("user").get(
             user__username=username
@@ -36,17 +36,25 @@ def user_profile(request, username: str):
         current_user_profile = None
 
     # request should be POST and user cannot follow himself/herself
-    if request.method == "POST" and profile != current_user_profile and current_user_profile:
+    if (
+        request.method == "POST"
+        and profile != current_user_profile
+        and current_user_profile
+    ):
         data = request.POST
         action = data.get("follow")
-        follow_functionality(action=action, profile=profile, current_user_profile=current_user_profile)
+        follow_functionality(
+            action=action, profile=profile, current_user_profile=current_user_profile
+        )
         current_user_profile.save()
         cache.clear()
         return redirect("user_profile", username=username)
     else:
         tab = request.GET.get("tab")
         if tab == "saved":
-            bookmarked_posts = BookmarkPost.objects.select_related("post", "user").filter(user__username=username)
+            bookmarked_posts = BookmarkPost.objects.select_related(
+                "post", "user"
+            ).filter(user__username=username)
             posts = [bookmarked_post.post for bookmarked_post in bookmarked_posts]
         else:
             posts = Post.objects.select_related("user").filter(user__username=username)
@@ -59,7 +67,7 @@ def user_profile(request, username: str):
 
 @login_required
 def profile_update(request):
-    """ View for updating user's profile"""
+    """View for updating user's profile"""
 
     profile = UserProfile.objects.select_related("user").get(user=request.user)
     form = UserProfileForm(instance=profile)
@@ -71,13 +79,13 @@ def profile_update(request):
             cache.clear()
             messages.success(request, "Profile updated successfully")
             return redirect("user_update")
-        
+
     return render(request, "users/profile_update.html", {"form": form})
 
 
 @login_required
 def user_update(request):
-    """ View for updating user instance"""
+    """View for updating user instance"""
     emails = EmailAddress.objects.filter(user=request.user)
     form = UserUpdateForm(instance=request.user)
     if request.method == "POST":
@@ -87,7 +95,7 @@ def user_update(request):
             cache.clear()
             messages.success(request, "User updated successfully")
             return redirect("user_update")
-        
+
     return render(request, "users/user_update.html", {"form": form, "emails": emails})
 
 
@@ -103,7 +111,9 @@ def user_delete(request):
 def follows(request, username):
     # profile: UserProfile = get_object_or_404(UserProfile, user__username=username)
     try:
-        profile = UserProfile.objects.select_related("user").get(user__username=username)
+        profile = UserProfile.objects.select_related("user").get(
+            user__username=username
+        )
     except UserProfile.DoesNotExist:
         raise Http404
     # differentiating between anonymous user and logged-in user
@@ -111,18 +121,24 @@ def follows(request, username):
         current_user_profile = request.user.userprofile
     else:
         current_user_profile = None
-        
+
     # request should be POST and user cannot follow himself/herself
-    if request.method == "POST" and profile != current_user_profile and current_user_profile:
+    if (
+        request.method == "POST"
+        and profile != current_user_profile
+        and current_user_profile
+    ):
         data = request.POST
         action = data.get("follow")
-        follow_functionality(action=action, profile=profile, current_user_profile=current_user_profile)
+        follow_functionality(
+            action=action, profile=profile, current_user_profile=current_user_profile
+        )
         current_user_profile.save()
-        
+
         # obtaining value from hidden field so as to use profile username in the address bar ...
         # and not the one passed in action attribute in form tag.
         profile = request.POST.get("profile")
-        # for some reason value from hidden field gets appended with 's , so i've stripped it 
+        # for some reason value from hidden field gets appended with 's , so i've stripped it
         profile = profile.split("'")[0]
 
         cache.clear()
@@ -131,11 +147,15 @@ def follows(request, username):
         tab = request.GET.get("tab")
         if tab == "followers" or tab == None:
             # ordered to make sure logged in user is the first in the list of followers
-            follows = profile.followed_by.order_by(Case(When(id=request.user.id, then=0), default=1))
+            follows = profile.followed_by.order_by(
+                Case(When(id=request.user.id, then=0), default=1)
+            )
         elif tab == "following":
             # ordered to make sure logged in user is the first in the list of following
-            follows = profile.follows.order_by(Case(When(id=request.user.id, then=0), default=1))
-        
+            follows = profile.follows.order_by(
+                Case(When(id=request.user.id, then=0), default=1)
+            )
+
         context = {
             "follows": follows,
             "profile": profile,

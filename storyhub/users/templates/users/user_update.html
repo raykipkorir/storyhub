@@ -12,7 +12,7 @@
                 {% csrf_token %}
                 {{ form|crispy }}
                 <button name="user_update" type="submit" class="btn btn-primary mb-2">Update user</button>
-            </form>  
+            </form>
         </div>
 
         <div class="settings-form border rounded p-3">
@@ -25,9 +25,9 @@
                         <strong> - Primary</strong>
                         {% endif %}
                     </li>
-                {% endfor %} 
+                {% endfor %}
             </ul>
-            
+
         </div>
 
         <div class="settings-form border rounded p-3 mb-2">

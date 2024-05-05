@@ -19,18 +19,18 @@ StoryHub Community
                   <a href="{% url 'user_profile' post.user.username %}" style="color: black;" class="d-flex align-items-center gap-2">
                   {% if post.user.userprofile.profile_pic %}
                   <img
-                     src="{{ post.user.userprofile.profile_pic.url }}" 
-                     alt="" 
-                     height="30" 
-                     width="30" 
+                     src="{{ post.user.userprofile.profile_pic.url }}"
+                     alt=""
+                     height="30"
+                     width="30"
                      class="rounded-circle mt-2 "
                      />
                   {% else %}
                   <img
-                     src="{% static 'users/images/default_pic.jpg' %}" 
-                     alt="" 
-                     height="30" 
-                     width="30" 
+                     src="{% static 'users/images/default_pic.jpg' %}"
+                     alt=""
+                     height="30"
+                     width="30"
                      class="rounded-circle mt-2 "
                      />
                   {% endif %}

@@ -17,12 +17,12 @@ StoryHub Community
             <p><img id="output" width="200"/></p>
             <div class="d-flex gap-3">
                <label id="labelFileInput" for="fileInput" class="d-flex border rounded p-2 font-monospace" style="width: 120px">
-               Cover image 
+               Cover image
                <input id="fileInput" name="cover_image" type="file" accept="image/*" class="no-display" />
                </label>
                <span
-                  id="removeCoverImage" 
-                  class="border rounded p-2 font-monospace hover-red" 
+                  id="removeCoverImage"
+                  class="border rounded p-2 font-monospace hover-red"
                   style="display: none; cursor: pointer;">
                Remove
                </span>
@@ -42,10 +42,10 @@ StoryHub Community
             {{ form.errors.title }}
             {% endif %}
             {% comment %} post content {% endcomment %}
-            <textarea 
-               id="postContent" 
-               name="content" 
-               class="" 
+            <textarea
+               id="postContent"
+               name="content"
+               class=""
                style="width: 100%"
                rows="5"
                placeholder="Write post content here..."

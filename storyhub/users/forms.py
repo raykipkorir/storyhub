@@ -10,7 +10,9 @@ User = get_user_model()
 class UserSignUpForm(SignupForm):
     """Create user form"""
 
-    full_name = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Full name"}))
+    full_name = forms.CharField(
+        widget=forms.TextInput(attrs={"placeholder": "Full name"})
+    )
 
     def save(self, request):
         user = super().save(request)
@@ -24,10 +26,9 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ["profile_pic", "bio", "location", "twitter_url", "personal_website"]
-        
+
 
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ["username", "full_name"]
-        

@@ -3,7 +3,7 @@ version: '3.8'
 services:
 
   web:
-    build: 
+    build:
       context: .
     restart: always
     command: ["sh", "-c", "/start.sh"]

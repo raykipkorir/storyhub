@@ -12,16 +12,16 @@ Profile page - StoryHub Community
       {% comment %} profile pic {% endcomment %}
       <div>
          {% if profile.profile_pic %}
-         <img 
-            src="{{ profile.profile_pic.url }}" 
+         <img
+            src="{{ profile.profile_pic.url }}"
             alt=""
             height="100"
             width="100"
             class="border rounded"
             />
          {% else %}
-         <img 
-            src="{% static 'users/images/default_pic.jpg' %}" 
+         <img
+            src="{% static 'users/images/default_pic.jpg' %}"
             alt=""
             height="100"
             width="100"
@@ -98,9 +98,9 @@ Profile page - StoryHub Community
       <div class="mt-5">
          <ul class="nav nav-tabs">
             <li class="nav-item">
-               <a 
-               class="nav-link {% if tab == "posts" or tab == None %}active{% endif %}" 
-               aria-current="page" 
+               <a
+               class="nav-link {% if tab == "posts" or tab == None %}active{% endif %}"
+               aria-current="page"
                href="{% url 'user_profile' profile.user.username %}?tab=posts">
                Posts
                </a>
@@ -120,18 +120,18 @@ Profile page - StoryHub Community
                   <a href="{% url 'user_profile' post.user.username %}" style="color: black;" class="d-flex align-items-center gap-2">
                   {% if post.user.userprofile.profile_pic %}
                   <img
-                     src="{{ post.user.userprofile.profile_pic.url }}" 
-                     alt="" 
-                     height="30" 
-                     width="30" 
+                     src="{{ post.user.userprofile.profile_pic.url }}"
+                     alt=""
+                     height="30"
+                     width="30"
                      class="rounded-circle mt-2 "
                      />
                   {% else %}
                   <img
-                     src="{% static 'users/images/default_pic.jpg' %}" 
-                     alt="" 
-                     height="30" 
-                     width="30" 
+                     src="{% static 'users/images/default_pic.jpg' %}"
+                     alt=""
+                     height="30"
+                     width="30"
                      class="rounded-circle mt-2 "
                      />
                   {% endif %}

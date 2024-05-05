@@ -16,9 +16,9 @@ Follows - StoryHub Community
       <div class="mt-5">
          <ul class="nav nav-tabs">
             <li class="nav-item">
-               <a 
-               class="nav-link {% if tab == "followers" or tab == None %}active{% endif %}" 
-               aria-current="page" 
+               <a
+               class="nav-link {% if tab == "followers" or tab == None %}active{% endif %}"
+               aria-current="page"
                href="{% url 'follows' profile.user.username %}?tab=followers">
                Followers
                </a>
@@ -38,27 +38,27 @@ Follows - StoryHub Community
                   <a href="{% url 'user_profile' follow.user.username %}">
                   {% if follow.user.userprofile.profile_pic %}
                   <img
-                     src="{{ follow.profile_pic.url }}" 
-                     alt="" 
-                     height="50" 
-                     width="50" 
+                     src="{{ follow.profile_pic.url }}"
+                     alt=""
+                     height="50"
+                     width="50"
                      class="rounded-circle mt-2"
                      />
                   {% else %}
                   <img
-                     src="{% static 'users/images/default_pic.jpg' %}" 
-                     alt="" 
-                     height="50" 
-                     width="50" 
+                     src="{% static 'users/images/default_pic.jpg' %}"
+                     alt=""
+                     height="50"
+                     width="50"
                      class="rounded-circle mt-2"
                      />
                   {% endif %}
                   </a>
                </div>
                <div class="d-flex flex-column ms-3">
-                  <a 
-                     href="{% url 'user_profile' follow.user.username %}" 
-                     style="color: black;" 
+                  <a
+                     href="{% url 'user_profile' follow.user.username %}"
+                     style="color: black;"
                      class="fs-5"
                      >
                   {{ follow.user.full_name }}
@@ -89,12 +89,12 @@ Follows - StoryHub Community
                      {% endif %}
                   </div>
                </form>
-               {% endif %} 
+               {% endif %}
             </div>
             {% endif %}
-            
+
          </div>
-         {% endfor %} 
+         {% endfor %}
       </div>
    </div>
    {% comment %} profile snippet  {% endcomment %}
@@ -111,18 +111,18 @@ Follows - StoryHub Community
                {% comment %} profile pic {% endcomment %}
                {% if profile.profile_pic %}
                <img
-                  src="{{ profile.profile_pic.url }}" 
-                  alt="" 
-                  height="50" 
-                  width="50" 
+                  src="{{ profile.profile_pic.url }}"
+                  alt=""
+                  height="50"
+                  width="50"
                   class="rounded-circle mt-2 "
                   />
                {% else %}
                <img
-                  src="{% static 'users/images/default_pic.jpg' %}" 
-                  alt="" 
-                  height="50" 
-                  width="50" 
+                  src="{% static 'users/images/default_pic.jpg' %}"
+                  alt=""
+                  height="50"
+                  width="50"
                   class="rounded-circle mt-2 "
                   />
                {% endif %}
@@ -133,17 +133,17 @@ Follows - StoryHub Community
                </a>
                <div>
                   {% comment %} follower count {% endcomment %}
-                  <a 
-                     href="{% url 'follows' profile.user.username %}" 
-                     class="text-muted" 
+                  <a
+                     href="{% url 'follows' profile.user.username %}"
+                     class="text-muted"
                      style="cursor: pointer;"
                      >
                   {{ profile.followed_by.all.count }} follower{{ profile.followed_by.all.count|pluralize}}
                   </a>
                   {% comment %} following count {% endcomment %}
-                  <a 
-                     href="{% url 'follows' profile.user.username %}?tab=following" 
-                     class="text-muted" 
+                  <a
+                     href="{% url 'follows' profile.user.username %}?tab=following"
+                     class="text-muted"
                      style="cursor: pointer;"
                      >
                   {{ profile.follows.all.count }} following

@@ -12,16 +12,16 @@
           {% include 'search.html' %}
         </li>
         <li class="nav-item mt-2 ms-2">
-          <a 
-            class="github-button" 
-            href="https://github.com/raykipkorir/storyhub" 
-            data-color-scheme="no-preference: dark; light: light; dark: dark;" 
-            data-icon="octicon-star" 
+          <a
+            class="github-button"
+            href="https://github.com/raykipkorir/storyhub"
+            data-color-scheme="no-preference: dark; light: light; dark: dark;"
+            data-icon="octicon-star"
             aria-label="Star raykipkorir/storyhub on GitHub"
             class="m-1"
             >
             Star on github
-          </a> 
+          </a>
         </li>
       </ul>
       {% if user.is_authenticated %}
@@ -32,19 +32,19 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             {% if user.userprofile.profile_pic %}
-              <img 
-              src="{{ user.userprofile.profile_pic.url }}" 
-              alt="" 
-              height="25" 
-              width="25" 
+              <img
+              src="{{ user.userprofile.profile_pic.url }}"
+              alt=""
+              height="25"
+              width="25"
               style="border-radius: 100px"
               >
             {% else %}
-              <img 
-              src="{% static 'users/images/default_pic.jpg' %}" 
-              alt="" 
-              height="25" 
-              width="25" 
+              <img
+              src="{% static 'users/images/default_pic.jpg' %}"
+              alt=""
+              height="25"
+              width="25"
               style="border-radius: 100px"
               >
             {% endif %}
